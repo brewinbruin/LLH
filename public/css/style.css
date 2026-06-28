@@ -1,0 +1,410 @@
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --parch: #f0dca0;
+  --parch2: #dfc07a;
+  --parch3: #c8a050;
+  --ink: #1e0e04;
+  --ink2: #3a1e0a;
+  --ink3: #6b4020;
+  --gold: #b8860b;
+  --gold2: #d4a017;
+  --gold3: #e8c040;
+  --stone: #2a1810;
+  --stone2: #3d2415;
+  --stone3: #5c3820;
+  --red: #7a1515;
+  --green: #1e4a10;
+  --blue: #0f2a4a;
+  --radius: 10px;
+  --shadow: 0 2px 16px rgba(0,0,0,0.6);
+}
+
+html, body {
+  height: 100%; width: 100%;
+  overflow: hidden;
+  background: #0d0602;
+  font-family: 'Inter', sans-serif;
+  color: var(--parch);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SCREENS ── */
+.screen { display: none; position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── LOBBY ── */
+.lobby-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: 100vh; padding: 24px 16px; gap: 20px;
+}
+.title-block { text-align: center; }
+.title-rune { font-size: 48px; color: var(--gold2); line-height: 1; margin-bottom: 4px; font-family: 'IM Fell English', serif; text-shadow: 0 0 20px rgba(180,130,0,0.4); }
+.title-block h1 { font-family: 'IM Fell English', serif; font-size: 32px; color: var(--gold2); letter-spacing: 1px; line-height: 1; }
+.subtitle { font-family: 'IM Fell English', serif; font-style: italic; font-size: 15px; color: var(--parch3); margin-top: 4px; }
+
+.lobby-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(180,130,0,0.3);
+  border-radius: 14px; padding: 20px 18px; width: 100%; max-width: 360px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+input[type="text"] {
+  width: 100%; padding: 12px 14px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(200,160,80,0.4); border-radius: 8px;
+  color: var(--parch); font-size: 16px; font-family: 'Inter', sans-serif;
+  outline: none; transition: border-color .2s;
+}
+input[type="text"]:focus { border-color: var(--gold2); }
+input[type="text"]::placeholder { color: rgba(200,160,80,0.35); }
+
+.btn-gold {
+  padding: 13px; background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 60%, var(--gold) 100%);
+  border: none; border-radius: 8px; color: var(--ink); font-weight: 600;
+  font-size: 15px; cursor: pointer; letter-spacing: .5px; transition: filter .2s;
+}
+.btn-gold:hover { filter: brightness(1.1); }
+.btn-gold:active { filter: brightness(0.9); transform: scale(0.98); }
+
+.btn-stone {
+  padding: 12px 18px; background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(200,160,80,0.4); border-radius: 8px;
+  color: var(--parch); font-size: 15px; cursor: pointer; white-space: nowrap;
+  transition: background .2s;
+}
+.btn-stone:hover { background: rgba(255,255,255,0.12); }
+
+.btn-text { background: none; border: none; color: var(--parch3); font-size: 13px; cursor: pointer; text-decoration: underline; padding: 4px; }
+
+.divider { display: flex; align-items: center; gap: 10px; color: var(--ink3); }
+.divider::before, .divider::after { content:''; flex:1; height:1px; background: rgba(200,160,80,0.2); }
+.divider span { font-size: 12px; color: var(--parch3); }
+
+.join-row { display: flex; gap: 8px; }
+.join-row input { flex: 1; }
+
+.error-msg { color: #e07070; font-size: 13px; text-align: center; min-height: 18px; }
+
+/* ── WAITING ROOM ── */
+.waiting-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; min-height: 100vh; padding: 24px 16px; gap: 16px;
+}
+.room-code-display { text-align: center; }
+.room-code-label { font-size: 12px; color: var(--parch3); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 6px; }
+.room-code-big { font-family: 'IM Fell English', serif; font-size: 52px; color: var(--gold2); letter-spacing: 8px; display: block; text-shadow: 0 0 20px rgba(180,130,0,0.3); }
+.btn-copy { margin-top: 8px; padding: 8px 16px; background: rgba(180,130,0,0.15); border: 1px solid var(--gold); border-radius: 6px; color: var(--parch); font-size: 13px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; }
+.btn-copy:active { background: rgba(180,130,0,0.3); }
+
+.waiting-players { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 320px; }
+.waiting-player { background: rgba(255,255,255,0.05); border: 1px solid rgba(200,160,80,0.25); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+.waiting-player .wp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold2); }
+.waiting-player .wp-name { color: var(--parch); font-size: 14px; }
+.waiting-player .wp-host { font-size: 11px; color: var(--gold); margin-left: auto; }
+.waiting-hint { font-size: 13px; color: var(--parch3); font-style: italic; text-align: center; }
+.waiting-status { font-size: 13px; color: var(--parch3); font-style: italic; text-align: center; }
+
+/* ── GAME SCREEN ── */
+#screen-game {
+  display: none; flex-direction: column;
+  height: 100vh; overflow: hidden;
+  background: radial-gradient(ellipse at top, #1e0c04 0%, #080301 100%);
+}
+#screen-game.active { display: flex; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; background: rgba(0,0,0,0.5);
+  border-bottom: 1px solid rgba(180,130,0,0.2); flex-shrink: 0;
+}
+.topbar-round { font-family: 'IM Fell English', serif; font-size: 14px; color: var(--gold2); }
+.topbar-turn  { font-size: 12px; color: var(--parch3); font-style: italic; flex: 1; text-align: center; padding: 0 8px; }
+.topbar-deck  { font-size: 13px; color: var(--parch3); }
+
+/* ── OPPONENTS ── */
+.opponents-row {
+  display: flex; gap: 6px; padding: 8px 10px;
+  overflow-x: auto; flex-shrink: 0;
+  scrollbar-width: none;
+}
+.opponents-row::-webkit-scrollbar { display: none; }
+
+.opp-card {
+  min-width: 100px; flex-shrink: 0;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(200,160,80,0.2);
+  border-radius: 8px; padding: 8px 10px;
+  transition: border-color .3s;
+}
+.opp-card.active-turn { border-color: var(--gold2); background: rgba(180,130,0,0.1); }
+.opp-card.eliminated { opacity: 0.3; }
+.opp-card.protected  { border-color: #4a90d9; }
+.opp-name { font-size: 12px; font-weight: 600; color: var(--parch); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.opp-status { font-size: 10px; color: var(--parch3); font-style: italic; margin: 2px 0; min-height: 13px; }
+.opp-wins  { font-size: 10px; color: var(--gold); }
+.opp-discards { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
+.opp-disc-chip { font-size: 9px; background: rgba(180,130,0,0.12); border: 1px solid rgba(180,130,0,0.2); border-radius: 3px; padding: 1px 3px; color: var(--parch3); }
+
+/* ── HAND ── */
+.hand-section { flex-shrink: 0; padding: 6px 10px 4px; }
+.hand-label { font-size: 11px; color: var(--parch3); font-style: italic; text-align: center; margin-bottom: 6px; font-family: 'IM Fell English', serif; }
+.my-hand { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.my-hand::-webkit-scrollbar { display: none; }
+
+/* ── PLAYING CARD ── */
+.play-card {
+  width: 130px; height: 185px; border-radius: 10px; border: 2px solid var(--gold);
+  background: #f8f0d8; cursor: pointer; position: relative; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  transition: transform .2s, box-shadow .2s; user-select: none;
+  -webkit-tap-highlight-color: transparent; overflow: hidden;
+  flex-shrink: 0;
+}
+.play-card:active { transform: scale(0.95); }
+.play-card.selected { transform: translateY(-10px); box-shadow: 0 10px 28px rgba(180,130,0,0.5); border-color: var(--gold3); }
+
+.play-card .cv { position: absolute; top: 7px; left: 9px; font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1; }
+.play-card .cv2 { position: absolute; bottom: 7px; right: 9px; font-size: 20px; font-weight: 700; color: var(--ink); transform: rotate(180deg); line-height: 1; }
+.play-card .cart { font-size: 46px; line-height: 1; margin-bottom: 3px; }
+.play-card .cname { font-size: 11px; color: var(--ink2); text-align: center; font-family: 'IM Fell English', serif; font-style: italic; padding: 0 6px; line-height: 1.2; }
+
+/* Card color accents */
+.card-ring   { border-color: #888; background: #ebebeb; }
+.card-smaug  { border-color: #b02020; background: #fdf0f0; }
+.card-bard   { border-color: #2060a0; background: #f0f5fd; }
+.card-legolas { border-color: #207840; background: #f0fdf4; }
+.card-tauriel { border-color: #307840; background: #f0fdf2; }
+.card-gandalf { border-color: #7030a0; background: #f8f0fd; }
+.card-fili   { border-color: #c06020; background: #fdf5f0; }
+.card-thorin { border-color: #906010; background: #fdf8f0; }
+.card-bilbo  { border-color: #a02020; background: #fdf0f0; }
+.card-ark    { border-color: #b8860b; background: #fdfaf0; border-width: 3px; }
+
+/* ── ACTION PANEL ── */
+.action-panel {
+  flex: 1; overflow-y: auto; padding: 8px 10px;
+  border-top: 1px solid rgba(180,130,0,0.15);
+}
+.action-content { display: flex; flex-direction: column; gap: 8px; }
+.action-idle { color: var(--parch3); font-style: italic; font-size: 13px; text-align: center; padding: 12px 0; }
+.action-card-name { font-family: 'IM Fell English', serif; font-size: 15px; color: var(--gold2); }
+.action-effect { font-size: 12px; color: var(--parch3); font-style: italic; line-height: 1.4; }
+.action-prompt { font-size: 13px; color: var(--parch); margin: 4px 0; }
+.action-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.action-btn {
+  padding: 8px 14px; background: rgba(180,130,0,0.15);
+  border: 1px solid var(--gold); border-radius: 6px; color: var(--parch);
+  cursor: pointer; font-size: 13px; font-family: 'IM Fell English', serif;
+  transition: background .15s; -webkit-tap-highlight-color: transparent;
+}
+.action-btn:active { background: rgba(180,130,0,0.4); }
+.action-btn.confirm { border-color: #50a050; color: #90d090; }
+.action-btn.danger  { border-color: #a03030; color: #d09090; }
+
+/* ── LOG + CHAT ── */
+.log-section {
+  flex-shrink: 0; border-top: 1px solid rgba(180,130,0,0.15);
+  background: rgba(0,0,0,0.3); max-height: 130px; display: flex; flex-direction: column;
+}
+.game-log { flex: 1; overflow-y: auto; padding: 6px 10px; scrollbar-width: none; }
+.game-log::-webkit-scrollbar { display: none; }
+.log-entry { font-size: 11px; color: var(--parch3); padding: 2px 0; border-bottom: 1px solid rgba(180,130,0,0.08); line-height: 1.4; }
+.log-entry.important { color: var(--gold2); }
+.log-entry.chat { color: #8ab0d8; font-style: italic; }
+
+.btn-chat-send { padding: 7px 12px; background: rgba(180,130,0,0.2); border: 1px solid var(--gold); border-radius: 6px; color: var(--parch); cursor: pointer; font-size: 13px; }
+
+/* ── ROUND END ── */
+.round-end-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  min-height: 100vh; padding: 24px 16px; gap: 16px;
+}
+.re-title { font-family: 'IM Fell English', serif; font-size: 26px; color: var(--gold2); text-align: center; margin-top: 20px; }
+.re-results { width: 100%; max-width: 380px; background: rgba(255,255,255,0.04); border: 1px solid rgba(180,130,0,0.3); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.re-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(180,130,0,0.1); }
+.re-row:last-child { border: none; }
+.re-row-name { color: var(--parch); font-size: 14px; }
+.re-row-name.winner { color: var(--gold2); font-weight: 600; }
+.re-row-detail { font-size: 12px; color: var(--parch3); font-style: italic; text-align: right; }
+.re-log { width: 100%; max-width: 380px; background: rgba(0,0,0,0.3); border: 1px solid rgba(180,130,0,0.15); border-radius: 8px; padding: 10px; max-height: 120px; overflow-y: auto; }
+.re-log .log-entry { font-size: 11px; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+  display: flex; align-items: center; justify-content: center; z-index: 200; padding: 16px;
+}
+.modal-box {
+  background: #1a0d05; border: 1px solid var(--gold); border-radius: 14px;
+  padding: 20px 18px; width: 100%; max-width: 340px; max-height: 80vh; overflow-y: auto;
+}
+.guide-box { max-width: 400px; max-height: 88vh; }
+.modal-title { font-family: 'IM Fell English', serif; font-size: 18px; color: var(--gold2); text-align: center; margin-bottom: 12px; }
+.modal-body { color: var(--parch); font-size: 13px; line-height: 1.6; margin-bottom: 14px; }
+.modal-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.modal-btn { padding: 9px 18px; background: rgba(180,130,0,0.2); border: 1px solid var(--gold); border-radius: 6px; color: var(--parch); cursor: pointer; font-family: 'IM Fell English', serif; font-size: 14px; }
+.modal-btn:active { background: rgba(180,130,0,0.4); }
+
+/* Card Guide */
+.guide-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.guide-card { display: flex; gap: 10px; align-items: flex-start; padding: 10px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(200,160,80,0.2); }
+.guide-art { font-size: 26px; flex-shrink: 0; width: 36px; text-align: center; }
+.guide-info .gname { font-family: 'IM Fell English', serif; color: var(--gold2); font-size: 14px; }
+.guide-info .gval  { font-size: 11px; color: var(--parch3); margin-bottom: 3px; }
+.guide-info .geff  { font-size: 12px; color: var(--parch); line-height: 1.4; }
+
+/* ── UTILITIES ── */
+.highlight { color: var(--gold2); font-weight: 600; }
+
+/* ── CHAT FAB + DRAWER ── */
+.chat-fab {
+  position: fixed; bottom: 20px; right: 16px; z-index: 50;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--gold); border: none; font-size: 22px;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.chat-fab.visible { display: flex; }
+.chat-fab .chat-badge {
+  position: absolute; top: 2px; right: 2px;
+  background: #e04040; color: #fff; font-size: 10px; font-weight: 700;
+  border-radius: 50%; width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.chat-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 98;
+}
+.chat-backdrop.open { display: block; }
+
+.chat-drawer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+  background: #1a0d05; border-top: 1px solid var(--gold);
+  border-radius: 16px 16px 0 0;
+  transform: translateY(100%); transition: transform .28s ease;
+  max-height: 60vh; display: flex; flex-direction: column;
+}
+.chat-drawer.open { transform: translateY(0); }
+
+.chat-drawer-inner { display: flex; flex-direction: column; height: 100%; }
+.chat-drawer-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px 10px; border-bottom: 1px solid rgba(180,130,0,0.2);
+  font-family: 'IM Fell English', serif; font-size: 16px; color: var(--gold2);
+  flex-shrink: 0;
+}
+.chat-close-btn {
+  background: none; border: none; color: var(--parch3); font-size: 18px;
+  cursor: pointer; padding: 2px 6px; line-height: 1;
+}
+
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 6px;
+  scrollbar-width: none;
+}
+.chat-messages::-webkit-scrollbar { display: none; }
+.chat-msg { font-size: 13px; line-height: 1.4; }
+.chat-msg .chat-who { color: var(--gold2); font-weight: 600; margin-right: 4px; }
+.chat-msg .chat-text { color: var(--parch); }
+
+.chat-input-row {
+  display: flex; gap: 8px; padding: 10px 14px 16px; flex-shrink: 0;
+  border-top: 1px solid rgba(180,130,0,0.15);
+}
+.chat-input-row input { flex: 1; }
+
+/* ── NOTICE TOAST ── */
+.notice-toast {
+  position: fixed; top: 60px; left: 50%; transform: translateX(-50%) translateY(-12px);
+  background: rgba(20,10,2,0.95); border: 1px solid rgba(180,130,0,0.5);
+  border-radius: 8px; padding: 10px 16px; font-size: 13px; color: var(--parch);
+  max-width: 88vw; text-align: center; z-index: 300;
+  opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none;
+  line-height: 1.4;
+}
+.notice-toast.notice-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.notice-toast.notice-personal { border-color: var(--gold2); color: var(--gold2); }
+
+/* ── YOU TAG + OWN PANEL ── */
+.you-tag { font-size: 9px; color: var(--parch3); font-weight: 400; }
+.opp-card.opp-me { border-color: rgba(180,130,0,0.45); }
+
+/* ── QUIT BUTTON (topbar) ── */
+.topbar-quit {
+  padding: 5px 10px; background: rgba(120,20,20,0.3);
+  border: 1px solid rgba(180,60,60,0.5); border-radius: 5px;
+  color: #d08080; font-size: 11px; cursor: pointer;
+  font-family: 'IM Fell English', serif; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.topbar-quit:active { background: rgba(160,30,30,0.6); color: #fff; }
+
+/* ── LOG FAB ── */
+.log-fab {
+  position: fixed; bottom: 82px; right: 16px; z-index: 50;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(40,20,5,0.92); border: 1px solid var(--gold);
+  font-size: 22px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.log-fab.visible { display: flex; }
+
+/* ── LOG DRAWER ── */
+.log-drawer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+  background: #120a02; border-top: 1px solid var(--gold);
+  border-radius: 16px 16px 0 0;
+  transform: translateY(100%); transition: transform .28s ease;
+  max-height: 65vh; display: flex; flex-direction: column;
+}
+.log-drawer.open { transform: translateY(0); }
+
+/* ── GUIDE FAB ── */
+.guide-fab {
+  position: fixed; bottom: 144px; right: 16px; z-index: 50;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(40,20,5,0.92); border: 1px solid var(--gold);
+  font-size: 22px; cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.guide-fab.visible { display: flex; }
+
+/* ── MEANDERING MADDENS LOGO ── */
+.powered-by {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.mm-logo {
+  width: 140px; height: 140px; object-fit: contain;
+  border-radius: 12px;
+  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.4));
+}
+.powered-label {
+  font-size: 11px; color: var(--parch3); font-style: italic;
+  letter-spacing: 1px;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  font-size: 10px; color: var(--parch3); text-align: center;
+  font-style: italic; opacity: 0.6; line-height: 1.5;
+  letter-spacing: 0.3px;
+}
+
+
+
+/* ── SECONDARY BUTTON (round end quit) ── */
+.btn-secondary {
+  padding: 10px 20px; background: rgba(120,20,20,0.2);
+  border: 1px solid rgba(180,60,60,0.5); border-radius: 6px;
+  color: #d08080; cursor: pointer; font-family: 'IM Fell English', serif;
+  font-size: 14px; margin-top: 4px;
+}
+.btn-secondary:active { background: rgba(160,30,30,0.5); color: #fff; }
